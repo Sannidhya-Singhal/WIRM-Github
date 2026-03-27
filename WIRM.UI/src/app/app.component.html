@@ -1,0 +1,23 @@
+<header class="w-full bg-black py-3 flex flex-row items-center">
+  @if (!isLoggedIn) {
+    <p class="text-white font-bold ml-5">Please login to use this application</p>    
+    <button class="button-base ml-auto mr-5"
+            (click)="login()">
+      Login
+    </button>
+  }  @else {    
+    <p class="text-white font-bold ml-5">Welcome {{ this.accountName }}</p>
+    <button class="button-base ml-auto mr-5"
+            (click)="logout()">
+      Logout
+    </button>
+  }
+</header>
+
+<div class="mt-5 mr-5 ml-5 flex flex-col space-y-2">
+  @if (this.isLoggedIn) {
+    <app-header/>  
+    <router-outlet />
+  }
+</div>
+

@@ -1,0 +1,260 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f3f2f1;
+            color: #323130;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border: 1px solid #edebe9;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            padding: 16px 24px;
+            border-bottom: 1px solid #edebe9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 15px;
+            font-weight: 600;
+            color: #323130;
+        }
+
+        .devops-link {
+            color: #0078d4;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .title-section {
+            padding: 24px;
+            border-bottom: 1px solid #edebe9;
+        }
+
+        .title-main {
+            font-size: 20px;
+            font-weight: 600;
+            color: #323130;
+            margin: 0 0 8px 0;
+        }
+
+            .title-main a {
+                color: #0078d4;
+                text-decoration: none;
+            }
+
+                .title-main a:hover {
+                    text-decoration: underline;
+                }
+
+        .subtitle {
+            color: #605e5c;
+            font-size: 13px;
+            margin: 8px 0 0 0;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 8px 16px;
+            background-color: #0078d4;
+            color: white;
+            text-decoration: none;
+            border-radius: 2px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+            .button:hover {
+                background-color: #106ebe;
+            }
+
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .details-table tr {
+                border-bottom: 1px solid #edebe9;
+            }
+
+            .details-table td {
+                padding: 8px 24px 8px 32px;
+                font-size: 13px;
+            }
+
+                .details-table td:first-child {
+                    width: 180px;
+                    color: #605e5c;
+                    font-weight: 400;
+                }
+
+                .details-table td:last-child {
+                    color: #323130;
+                }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background-color: #e8f4e8;
+            color: #107c10;
+            border-radius: 2px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .section-header {
+            padding: 16px 24px;
+            background-color: #faf9f8;
+            font-weight: 600;
+            font-size: 14px;
+            color: #323130;
+            border-bottom: 1px solid #edebe9;
+        }
+
+        .section-content {
+            padding: 16px 24px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #323130;
+        }
+            .section-content ul {
+                list-style: none; /* removes default bullets */
+                padding: 0;
+                margin: 0;
+            }
+
+            .section-content li {
+                display: block; /* ensures each <li> takes full width */
+                margin-bottom: 5px; /* optional spacing between rows */
+            }
+
+
+        .attachment-tag {
+            color: #333333;
+            font-size: 14px;
+            font-family: Segoe UI, Helvetica, Arial, sans-serif;
+            background-color: #CEF1DE;
+            display: inline-block;
+            padding: 2px 4px;
+            border: 1px solid white;
+            text-decoration: none; /* keeps links clean */
+        }
+
+            .attachment:hover {
+                background-color: #edebe9;
+            }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <!-- Header -->
+        <div class='header'>
+            <div class='logo'>🔷 Microsoft</div>
+            <a href='#' class='devops-link'>Azure DevOps</a>
+        </div>
+
+        <!-- Title Section -->
+        <div class='title-section'>
+            <h1 class='title-main'>
+                {{ChangedBy}} created
+                <a href='https://liox-teams.visualstudio.com/Operations%20Product%20Requests/_workitems/edit/{{TicketId}}'>User Story {{TicketId}}</a>
+            </h1>
+            <p class='subtitle'>{{ReflectedWorkItemTitle}}</p>
+            <a href='https://liox-teams.visualstudio.com/Operations%20Product%20Requests/_workitems/edit/{{TicketId}}' class='button'>View work item</a>
+        </div>
+
+        <!-- Details Table -->
+        <table class='details-table'>
+            <tr>
+                <td>Changed By</td>
+                <td><span class='tag'>{{ChangedBy}}</span></td>
+            </tr>
+            <tr>
+                <td>Title</td>
+                <td><span class='tag'>{{TitlePart}}</span></td>
+            </tr>
+            <tr>
+                <td>State</td>
+                <td><span class='tag'>New</span></td>
+            </tr>
+            <tr>
+                <td>Reason</td>
+                <td><span class='tag'>New</span></td>
+            </tr>
+            <tr>
+                <td>Original Requestor</td>
+                <td><span class='tag'>{{OriginalRequestorSide}}</span></td>
+            </tr>
+            <tr>
+                <td>Weighting</td>
+                <td><span class='tag'>{{Weighing}}</span></td>
+            </tr>
+            <tr>
+                <td>Resolutions</td>
+                <td><span class='tag'>Unresolved</span></td>
+            </tr>
+            <tr>
+                <td>Value Area</td>
+                <td><span class='tag'>Business</span></td>
+            </tr>
+            <tr>
+                <td>Business driver</td>
+                <td><span class='tag'>{{BusinessDriver}}</span></td>
+            </tr>
+            <tr>
+                <td>MonthlyUSDRevenue</td>
+                <td><span class='tag'>{{Revenue}}</span></td>
+            </tr>
+            <tr>
+                <td>Region/Vertical</td>
+                <td><span class='tag'>{{VerticalType}}</span></td>
+            </tr>
+            <tr>
+                <td>Deadline</td>
+                <td><span class='tag'>{{Deadline}}</span></td>
+            </tr>
+            <tr>
+                <td>DeadlineType</td>
+                <td><span class='tag'>Firm Deadline</span></td>
+            </tr>
+            <tr>
+                <td>Customer Name</td>
+                <td><span class='tag'>{{CustomerName}}</span></td>
+            </tr>
+            <tr>
+                <td>Product, App or Tool Effected</td>
+                <td><span class='tag'>{{ReflectedProductName}}</span></td>
+            </tr>
+        </table>
+
+        <!-- Description Section -->
+        <div class='section-header'>Description</div>
+        <div class='section-content'>
+            <strong> {{ReflectedWorkItemDescription}}</strong>
+            <p style='margin: 8px 0;'>----------</p>
+        </div>
+       
+        <!-- Attachments -->
+        <div class='section-header'>Attachments</div>
+        <div class='section-content'>
+            <ul>
+                {{Attachments}}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

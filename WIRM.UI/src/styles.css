@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+body {
+    @apply bg-white
+}
+
+.button-base {
+    @apply bg-default-bg p-3 text-center text-white font-bold align-middle rounded-xl hover:bg-default-hover-bg hover:cursor-pointer; 
+}
+
+tbody tr:hover {
+    @apply bg-default-tr-hover-bg
+}
+tbody td {
+    @apply p-2 text-gray-700 font-medium
+}
+thead th {
+    @apply text-white bg-default-th-bg pb-3 font-bold
+}
+
+.container-custom {
+    @apply w-full p-0.5 rounded-xl bg-default-th-bg
+}
+.container-outline {
+    @apply w-full p-1.5 rounded-xl bg-default-th-bg/30
+}
+.validation-message {
+    @apply text-red-600 text-sm
+}
+
+@theme {
+    --color-default-bg: #cc3f00;
+    --color-default-hover-bg: #cc7e00;
+    --color-default-th-bg: #3d4045;
+    --color-default-tr-bg: #bacacc;
+    --color-default-tr-hover-bg: #ccc499;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+}
+

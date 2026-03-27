@@ -1,0 +1,87 @@
+trigger:
+  branches:
+    include:
+      - staging
+      - 1623442-opr-enhancement
+       
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Debug'
+  nodeVersion: '22.x'
+  clientFolderName: 'client'
+  apiFolderName: 'api'
+  clientWorkDir: 'WIRM.UI'
+  apiWorkDir: 'WIRM.API'
+  npmCacheDir: '$(Pipeline.Workspace)/.npm'
+
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildAngular
+        displayName: 'Build Angular'
+        steps:
+          - task: NodeTool@0
+            inputs: 
+              versionspec: '$(nodeVersion)'
+            displayName: 'Install Node.js v.$(nodeVersion)'
+
+          - script: mkdir -p $(npmCacheDir)
+            displayName: 'Create npm cache directory'
+          - task: Cache@2
+            inputs:
+              key: 'npm | "$(Agent.OS)" | $(Build.SourcesDirectory)/$(clientWorkDir)/package-lock.json'
+              restoreKeys: |
+                npm | "$(Agent.OS)"
+              path: '$(npmCacheDir)'
+            displayName: 'Cache npm dependencies'
+
+          - script: |
+              npm install -g @angular/cli
+              npm install --no-audit
+              ng build --configuration staging
+            workingDirectory: '$(clientWorkDir)'
+            displayName: 'Install and Build Angular App'
+
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: '$(clientWorkDir)/dist/wirm.ui/browser'
+              Contents: '**'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/$(clientFolderName)'
+            displayName: 'Copy Frontend Files to Artifact Staging'
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(Build.ArtifactStagingDirectory)/$(clientFolderName)'
+              artifactName: 'client app'
+              publishLocation: 'Container'
+            displayName: 'Publish Angular Artifact'
+
+      - job: BuildBackend
+        displayName: 'Build .NET Backend'
+        steps:
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              version: '8.0.x'
+            displayName: 'Install .NET SDK'
+
+          - script: dotnet restore
+            workingDirectory: '$(apiWorkDir)'
+            displayName: 'Restore .NET Dependencies'
+
+          - script: dotnet build --configuration $(buildConfiguration)
+            workingDirectory: '$(apiWorkDir)'
+            displayName: 'Build .NET Project'
+
+          - script: dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(apiFolderName)
+            workingDirectory: '$(apiWorkDir)'
+            displayName: 'Publish .NET Project'
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(Build.ArtifactStagingDirectory)/$(apiFolderName)'
+              artifactName: 'backend api'
+              publishLocation: 'Container'
+            displayName: 'Publish Backend API Artifact'

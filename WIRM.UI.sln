@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "WIRM.UI", "WIRM.UI\WIRM.UI.esproj", "{D8875940-9743-66C8-F4B6-8534C2624900}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIRM.API", "WIRM.API\WIRM.API.csproj", "{542E40C1-DA6B-408A-9C1B-C5EBC407962E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "yaml", "yaml", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		pipeline-production.yaml = pipeline-production.yaml
+		pipeline-staging.yaml = pipeline-staging.yaml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D8875940-9743-66C8-F4B6-8534C2624900}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8875940-9743-66C8-F4B6-8534C2624900}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{542E40C1-DA6B-408A-9C1B-C5EBC407962E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{542E40C1-DA6B-408A-9C1B-C5EBC407962E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{542E40C1-DA6B-408A-9C1B-C5EBC407962E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{542E40C1-DA6B-408A-9C1B-C5EBC407962E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {252B8678-B017-4DC0-999A-4CB6A2E376DE}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,94 @@
+<div class="container-outline">
+  <div class="container-custom">
+    <div class="my-5">
+      @if (loading) {
+        <div class="flex items-center">
+          <div class="spinner"></div>
+          <p class="text-white pl-3">Loading work items...</p>
+        </div>  
+      } @else if (error) {
+          <p class="text-red-500">{{ error }}</p>
+      } @else {
+        @if (sortedList$ | async; as items) {
+          <table class="w-full table-fixed">
+            <thead>
+              <tr>
+                <th class="w-[15%]" (click)="sortData('id')">
+                  ID
+                  @if (sortColumn === 'id') { <span>{{sortDirection === 'asc' ? '▲' : sortDirection === 'desc' ? '▼' : '' }}</span> }
+                </th>
+                <th class="w-[55%]" (click)="sortData('title')">
+                  Title
+                  @if (sortColumn === 'title') { <span>{{sortDirection === 'asc' ? '▲' : sortDirection === 'desc' ? '▼' : '' }}</span> }
+                </th>
+                <th class="w-[15%]" (click)="sortData('state')">
+                  Status
+                  @if (sortColumn === 'state') { <span>{{sortDirection === 'asc' ? '▲' : sortDirection === 'desc' ? '▼' : '' }}</span> }
+                </th>
+                <th class="w-[15%]" (click)="sortData('lastUpdate')">
+                  Last Update
+                  @if (sortColumn) { <span>{{sortDirection === 'asc' ? '▲' : sortDirection === 'desc' ? '▼' : '' }}</span> }           
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+            @for (item of items; track item.id) {              
+              <tr class="bg-default-tr-bg" 
+                  (click)="openLink(item.link)"
+                  [attr.title]="item.link">
+                <td class="text-center">{{ item.id }}</td>
+                <td>{{ item.title }}</td>
+                <td class="text-center">{{ item.state }}</td>
+                <td class="text-center">{{ item.lastUpdate | date:'MMM d, yyyy' }}</td>
+              </tr>
+            }
+            </tbody>
+          </table>
+        }
+      }
+    </div>
+
+    @if (paginationInfo$ | async; as paginationInfo) {
+      <div class="flex items-center justify-between m-3 text-white">      
+        <div>
+          <label>Items per page:</label>
+          <select #pageSizeSelect
+                  [value]="currentRequest.pageSize" 
+                  (change)="onPageSizeChange(+pageSizeSelect.value)">
+            @for (size of pageSizeOptions; track $index) {
+              <option class="text-black">{{ size }} </option>
+            }
+          </select>
+        </div>
+        
+        <div>
+          Showing {{ (paginationInfo.currentPage - 1) * paginationInfo.pageSize + 1 }} 
+          to {{ paginationInfo.currentPage * paginationInfo.pageSize | min:paginationInfo.totalCount }} 
+          of {{ paginationInfo.totalCount }} items
+        </div>
+
+        <div class="flex gap-5">
+          <button class="cursor-pointer"
+            [disabled]="!paginationInfo.hasPreviousPage"
+            (click)="onPageChange(paginationInfo.currentPage - 1)">
+            Previous
+          </button>
+
+          @for (page of pageNumbers$ | async; track $index) {          
+            <button  class="cursor-pointer"
+              [class.active]="page === paginationInfo.currentPage"
+              [disabled]="page === -1"
+              (click)="page !== -1 && onPageChange(page)">
+              {{ page === -1 ? '...' : page }}
+            </button>
+          }
+          <button class="cursor-pointer"
+            [disabled]="!paginationInfo.hasNextPage"
+            (click)="onPageChange(paginationInfo.currentPage + 1)">
+            Next
+          </button>
+        </div>    
+      </div>  
+    }
+  </div>
+</div>

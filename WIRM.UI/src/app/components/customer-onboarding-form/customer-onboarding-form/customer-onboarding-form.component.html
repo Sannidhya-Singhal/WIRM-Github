@@ -1,0 +1,621 @@
+<div class="container-outline lg:place-self-center lg:max-w-[1200px]">
+      <form (keydown.enter)="onEnterPress($event)" [formGroup]="customerOnboardingForm" (ngSubmit)="onSubmit()">
+        <div class="shadow-2xl rounded-xl m-auto">
+            <div class="accordion">
+                <input #inputStep1 type="radio" class="accordion-input" name="steps" id="step1" checked>
+                <label class="accordion-label" for="step1">Step 1 - Account Details</label>
+<div class="accordion-content w-full">
+  <div class="flex w-full flex-col gap-6 md:flex-row md:items-start">
+    <!-- Customer Group Name -->
+    <div class="flex min-w-0 flex-1 flex-col">
+      <label class="mb-2 font-medium">
+        Customer Group Name <span class="required">*</span>
+      </label>
+      <input
+        type="text"
+        class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+        formControlName="customerGroupName"
+      />
+      @if (submitted && customerOnboardingForm.controls.customerGroupName.errors) {
+        <small class="validation-message mt-1 block">Enter customer group name</small>
+      }
+    </div>
+
+    <!-- Customer Account Name -->
+    <div class="flex min-w-0 flex-1 flex-col">
+      <label class="mb-2 font-medium">
+        Customer Account Name <span class="required">*</span>
+      </label>
+      <input
+        type="text"
+        class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+        formControlName="customerAccountName"
+      />
+      @if (submitted && customerOnboardingForm.controls.customerAccountName.errors) {
+        <small class="validation-message mt-1 block">Enter customer account name</small>
+      }
+    </div>
+
+    <!-- CODA Code -->
+    <div class="flex min-w-0 flex-1 flex-col">
+      <label class="mb-2 font-medium">
+        CODA code(s) <span class="required">*</span>
+      </label>
+      <input
+        type="text"
+        class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+        formControlName="codaCode"
+      />
+      @if (submitted && customerOnboardingForm.controls.codaCode.errors) {
+        <small class="validation-message mt-1 block">Enter CODA code(s)</small>
+      }
+    </div>
+  </div>
+</div>
+            </div>
+
+       <div class="accordion">
+  <input #inputStep2 type="radio" class="accordion-input" name="steps" id="step2">
+  <label class="accordion-label" for="step2">Step 2 - Optional Module Settings</label>
+
+  <div class="accordion-content w-full items-stretch">
+    <!-- Grid pairs rows (Validate|Apps, Engage|MSP, Insights|) so right column aligns with left -->
+    <div class="grid w-full min-w-0 grid-cols-1 gap-y-6 md:grid-cols-2 md:gap-x-6 md:gap-y-6">
+      <div class="flex min-w-0 items-center gap-3">
+        <label class="toggle-switch">
+          <input type="checkbox" formControlName="validate" />
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="font-medium">Validate</span>
+        <span class="text-sm text-gray-500">{{ customerOnboardingForm.controls.validate.value ? 'On' : 'Off' }}</span>
+      </div>
+      <div class="flex min-w-0 items-center gap-3">
+        <label class="toggle-switch">
+          <input type="checkbox" formControlName="apps" />
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="font-medium">Apps</span>
+        <span class="text-sm text-gray-500">{{ customerOnboardingForm.controls.apps.value ? 'On' : 'Off' }}</span>
+      </div>
+      <div class="flex min-w-0 items-center gap-3">
+        <label class="toggle-switch">
+          <input type="checkbox" formControlName="engage" />
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="font-medium">Engage</span>
+        <span class="text-sm text-gray-500">{{ customerOnboardingForm.controls.engage.value ? 'On' : 'Off' }}</span>
+      </div>
+      <div class="flex min-w-0 items-center gap-3">
+        <label class="toggle-switch">
+          <input type="checkbox" formControlName="msp" />
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="font-medium">MSP</span>
+        <span class="text-sm text-gray-500">{{ customerOnboardingForm.controls.msp.value ? 'On' : 'Off' }}</span>
+      </div>
+      <div class="flex min-w-0 items-center gap-3">
+        <label class="toggle-switch">
+          <input type="checkbox" formControlName="insights" />
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="font-medium">Insights</span>
+        <span class="text-sm text-gray-500">{{ customerOnboardingForm.controls.insights.value ? 'On' : 'Off' }}</span>
+      </div>
+      <div class="hidden min-w-0 md:block" aria-hidden="true"></div>
+    </div>
+  </div>
+       </div>
+
+ <div class="accordion">
+  <input #inputStep3 type="radio" class="accordion-input" name="steps" id="step3">
+  <label class="accordion-label" for="step3">Step 3 - User and Roles</label>
+   
+   <div class="accordion-content w-full items-stretch">
+    <div class="flex w-full min-w-0 flex-col">
+      <p class="mb-4 font-medium">Primary User Details <span class="required">*</span></p>
+      <div class="flex w-full flex-col gap-6 md:flex-row md:items-start">
+        <div class="flex min-w-0 flex-1 flex-col">
+          <label class="mb-2 font-medium">Primary User's First Name <span class="required">*</span></label>
+          <input type="text"
+                 class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                 formControlName="primaryUserFirstName" />
+          @if (submitted && customerOnboardingForm.controls.primaryUserFirstName.errors) {
+            <small class="validation-message mt-1 block">Enter primary user first name</small>
+          }
+        </div>
+        <div class="flex min-w-0 flex-1 flex-col">
+          <label class="mb-2 font-medium">Primary User's Last Name <span class="required">*</span></label>
+          <input type="text"
+                 class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                 formControlName="primaryUserLastName" />
+          @if (submitted && customerOnboardingForm.controls.primaryUserLastName.errors) {
+            <small class="validation-message mt-1 block">Enter primary user last name</small>
+          }
+        </div>
+        <div class="flex min-w-0 flex-1 flex-col">
+          <label class="mb-2 font-medium">Primary user email address <span class="required">*</span></label>
+          <input type="text"
+                 class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                 formControlName="primaryUserEmailAddress" />
+          @if (submitted && customerOnboardingForm.controls.primaryUserEmailAddress.errors?.['required']) {
+            <small class="validation-message mt-1 block">Enter primary user email address</small>
+          }
+          @if (submitted && customerOnboardingForm.controls.primaryUserEmailAddress.errors?.['email']) {
+            <small class="validation-message mt-1 block">Enter a valid email address</small>
+          }
+        </div>
+      </div>
+
+      <div class="mt-10 border-t border-gray-300 pt-8">
+        <div class="mb-4 flex flex-wrap items-center gap-3">
+          <p class="m-0 font-medium">Additional Users</p>
+          <button type="button" class="button-base h-10 flex items-center gap-2 px-4 py-2 text-base" (click)="addOtherUserRow()"
+                  [disabled]="otherUsers.length >= maxOtherUsers">
+            <img src="assets/icons/add-icon.svg" alt="" class="h-4 w-4" />
+            Add
+          </button>
+          <button type="button" class="button-base flex h-10 items-center gap-2 px-4 py-2 text-base"
+                  (click)="otherUsersExcelInput.click()">
+            <img src="assets/icons/paperclip-solid.svg" alt="" class="h-5 w-5" />
+            Upload Excel
+          </button>
+          <input #otherUsersExcelInput type="file" class="hidden" accept=".xlsx,.xls,.xlsm,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/vnd.ms-excel.sheet.macroEnabled.12"
+                 (change)="onOtherUsersExcelSelected($event)" />
+          @if (otherUsers.length >= maxOtherUsers) {
+            <span class="text-sm text-gray-700">Maximum {{ maxOtherUsers }} rows.</span>
+          } @else {
+            <span class="text-sm text-gray-700">Click Add to add a row (up to {{ maxOtherUsers }}).</span>
+          }
+        </div>
+        <div class="mb-4 space-y-2">
+          <div class="text-xm text-gray-500 space-y-1">
+            <small>One Excel file only (.xlsx, .xls, .xlsm). Max {{ maxOtherUsersExcelMb }} MB.</small>
+          </div>
+          @if (otherUsersUploadMessages.length > 0) {
+            <div class="flex flex-col space-y-1">
+              @for (message of otherUsersUploadMessages; track $index) {
+                <small class="validation-message">{{ message }}</small>
+              }
+            </div>
+          }
+          @if (otherUsersExcelFile; as excel) {
+            <div class="flex max-w-lg items-center justify-between gap-2">
+              <span class="truncate" [title]="excel.name">{{ excel.name }}</span>
+              <button type="button" class="shrink-0 hover:cursor-pointer" (click)="removeOtherUsersExcel()">
+                <img src="assets/icons/remove-icon.svg" alt="Remove" class="h-4 w-4" />
+              </button>
+            </div>
+          }
+        </div>
+
+        <div formArrayName="otherUsers" class="flex min-w-0 flex-col gap-5">
+          @for (row of otherUsers.controls; track row; let i = $index) {
+            <!-- overflow-x-auto: accordion uses overflow-hidden; row + Delete can exceed width — scroll instead of clipping -->
+            <div class="max-w-full overflow-x-auto pb-1">
+              <div [formGroupName]="i"
+                   class="flex w-max min-w-full flex-nowrap items-end gap-3 md:gap-4">
+                <div class="flex w-48 shrink-0 flex-col sm:w-65">
+                  <label class="mb-2 font-medium">First Name</label>
+                  <input type="text"
+                         class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                         formControlName="firstName" />
+                </div>
+                <div class="flex w-48 shrink-0 flex-col sm:w-65">
+                  <label class="mb-2 font-medium">Last Name</label>
+                  <input type="text"
+                         class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                         formControlName="lastName" />
+                </div>
+                <div class="flex w-48 shrink-0 flex-col sm:w-65">
+                  <label class="mb-2 font-medium">E-mail</label>
+                  <input type="text"
+                         class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                         formControlName="email" />
+                </div>
+                <div class="flex w-48 shrink-0 flex-col sm:w-65">
+                  <label class="mb-2 font-medium">Role</label>
+                  <select class="w-full border-b-2 border-gray-500 bg-white px-2 py-1 md:max-w-80 text-black focus:border-accordion-bg focus:outline-none"
+                          formControlName="role">
+                    <option value="">-- Select --</option>
+                    <option value="Super User">Super User</option>
+                    <option value="Standard">Standard</option>
+                    <option value="Reviewer">Reviewer</option>
+                  </select>
+                </div>
+                <button type="button" class="shrink-0 hover:cursor-pointer"
+                        (click)="removeOtherUserRow(i)" title="Delete">
+                  <img src="assets/icons/remove-icon.svg" alt="Delete" class="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+<div class="accordion">
+  <input #inputStep4 type="radio" class="accordion-input" name="steps" id="step4">
+  <label class="accordion-label" for="step4">Step 4 - Process Specifics</label>
+
+  <div class="accordion-content w-full items-stretch">
+    <div class="flex w-full min-w-0 flex-col">
+      <div class="mb-4 flex flex-wrap items-center gap-3">
+        <p class="m-0 font-medium">Customized Templates</p>
+        <button type="button" class="button-base h-10 flex items-center gap-2 px-2 py-2 text-base" (click)="addCustomizedTemplateRow()"
+                [disabled]="customizedTemplates.length >= maxCustomizedTemplateRows">
+          <img src="assets/icons/add-icon.svg" alt="" class="h-4 w-4" />
+          Add
+        </button>
+        @if (customizedTemplates.length >= maxCustomizedTemplateRows) {
+          <span class="text-sm text-gray-700">Maximum {{ maxCustomizedTemplateRows }} rows.</span>
+        } @else {
+          <span class="text-sm text-gray-700">Click Add to add a row (up to {{ maxCustomizedTemplateRows }}).</span>
+        }
+      </div>
+
+      <div formArrayName="customizedTemplates" class="flex min-w-0 flex-col gap-5">
+        @for (row of customizedTemplates.controls; track row; let i = $index) {
+          <div class="max-w-full overflow-visible pb-1">
+            <div [formGroupName]="i"
+                 class="flex w-max min-w-full flex-nowrap items-start gap-3 md:gap-4">
+              <div class="flex w-48 shrink-0 flex-col sm:w-45">
+                <label class="mb-2 font-medium">Desired Name</label>
+                <input type="text"
+                       class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                       formControlName="desiredName" />
+              </div>
+              <div class="flex w-44 shrink-0 flex-col sm:w-48">
+                <label class="mb-2 font-medium">Existing Aurora Process?</label>
+                <select class="w-full border-b-2 border-gray-500 bg-white px-2 py-1 md:max-w-30 text-black focus:border-accordion-bg focus:outline-none"
+                        formControlName="existingAuroraProcess">
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div class="flex w-48 shrink-0 flex-col sm:w-56">
+                <label class="mb-2 font-medium">Available Add-ons</label>
+                <button type="button"
+                        class="multi-select-toggle"
+                        (click)="toggleMultiSelect('addOns-' + i)">
+                  {{ row.controls.availableAddOns.value.length ? row.controls.availableAddOns.value.join(', ') : '-- Select --' }}
+                </button>
+                @if (openMultiSelectKey === 'addOns-' + i) {
+                  <div class="multi-select-panel">
+                    @for (opt of availableAddOnOptions; track opt) {
+                      <label class="multi-select-option">
+                        <input type="checkbox"
+                               [checked]="isSelected(row.controls.availableAddOns, opt)"
+                               (change)="toggleOption(row.controls.availableAddOns, opt)" />
+                        {{ opt }}
+                      </label>
+                    }
+                  </div>
+                }
+              </div>
+              <div class="flex w-48 shrink-0 flex-col sm:w-56">
+                <label class="mb-2 font-medium">Work Type</label>
+                <button type="button"
+                        class="multi-select-toggle"
+                        (click)="toggleMultiSelect('workType-' + i)">
+                  {{ row.controls.workType.value.length ? row.controls.workType.value.join(', ') : '-- Select --' }}
+                </button>
+                @if (openMultiSelectKey === 'workType-' + i) {
+                  <div class="multi-select-panel">
+                    @for (opt of workTypeOptions; track opt) {
+                      <label class="multi-select-option">
+                        <input type="checkbox"
+                               [checked]="isSelected(row.controls.workType, opt)"
+                               (change)="toggleOption(row.controls.workType, opt)" />
+                        {{ opt }}
+                      </label>
+                    }
+                  </div>
+                }
+              </div>
+              <div class="flex w-48 shrink-0 flex-col sm:w-56">
+                <label class="mb-2 font-medium">Service</label>
+                <button type="button"
+                        class="multi-select-toggle"
+                        (click)="toggleMultiSelect('service-' + i)">
+                  {{ row.controls.service.value.length ? row.controls.service.value.join(', ') : '-- Select --' }}
+                </button>
+                @if (openMultiSelectKey === 'service-' + i) {
+                  <div class="multi-select-panel">
+                    @for (opt of serviceOptions; track opt) {
+                      <label class="multi-select-option">
+                        <input type="checkbox"
+                               [checked]="isSelected(row.controls.service, opt)"
+                               (change)="toggleOption(row.controls.service, opt)" />
+                        {{ opt }}
+                      </label>
+                    }
+                  </div>
+                }
+              </div>
+              <button type="button" class="mt-8 shrink-0 hover:cursor-pointer"
+                      (click)="removeCustomizedTemplateRow(i)" title="Delete">
+                <img src="assets/icons/remove-icon.svg" alt="Delete" class="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+        } 
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="accordion">
+  <input #inputStep5 type="radio" class="accordion-input" name="steps" id="step5">
+  <label class="accordion-label" for="step5">Step 5- Modifiers</label>
+
+  <div class="accordion-content w-full items-stretch">
+    <div class="flex w-full min-w-0 flex-col">
+      <!-- Business Modifiers -->
+      <div>
+        <div class="mb-4 flex flex-wrap items-center gap-3">
+          <p class="m-0 font-medium">Business Modifiers</p>
+          <button type="button" class="button-base h-10 flex items-center gap-2 px-4 py-2 text-base" (click)="addModifierRow(businessModifiers)"
+                  [disabled]="businessModifiers.length >= maxModifierRows">
+            <img src="assets/icons/add-icon.svg" alt="" class="h-4 w-4" />
+            Add
+          </button>
+          @if (businessModifiers.length >= maxModifierRows) {
+            <span class="text-sm text-gray-700">Maximum {{ maxModifierRows }} rows.</span>
+          } @else {
+            <span class="text-sm text-gray-700">Click Add to add a row (up to {{ maxModifierRows }}).</span>
+          }
+        </div>
+        <div formArrayName="businessModifiers" class="flex min-w-0 flex-col gap-5">
+          @for (row of businessModifiers.controls; track row; let i = $index) {
+            <div class="max-w-full overflow-x-auto pb-5">
+              <div [formGroupName]="i" class="flex w-max min-w-full flex-nowrap items-end gap-3 md:gap-4">
+                <div class="flex w-48 shrink-0 flex-col sm:w-56">
+                  <label class="mb-2 font-medium">Name</label>
+                  <input type="text" class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                         formControlName="name" />
+                </div>
+                <div class="flex w-48 shrink-0 flex-col sm:w-56">
+                  <label class="mb-2 font-medium">Values</label>
+                 <textarea rows="1"
+                            class="w-full resize-none bg-white px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                            placeholder="Up to 10 comma-separated values"
+                         formControlName="values"></textarea>
+                  @if (row.controls.values.errors?.['maxCommaSeparatedEntries']) {
+                   <small class="validation-message mt-1 block">Maximum 10 comma-separated values allowed</small>
+                  }
+                </div>
+                <div class="flex w-64 shrink-0 flex-col sm:w-72">
+                  <label class="mb-2 font-medium">Details/Purpose</label>
+                  <textarea rows="1"
+                            class="w-full resize-none bg-white px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                            formControlName="detailsPurpose"></textarea>
+                </div>
+                <div class="flex w-64 shrink-0 flex-col sm:w-72">
+                  <label class="mb-2 font-medium">Expected Behavior when selected</label>
+                  <textarea rows="1"
+                            class="w-full resize-none bg-white px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                            formControlName="expectedBehaviorWhenSelected"></textarea>
+                </div>
+                <button type="button" class="shrink-0 hover:cursor-pointer"
+                        (click)="removeModifierRow(businessModifiers, i)" title="Delete">
+                  <img src="assets/icons/remove-icon.svg" alt="Delete" class="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Finance Modifiers -->
+      <div class="mt-10 border-t border-gray-300 pt-8">
+        <div class="mb-4 flex flex-wrap items-center gap-3">
+          <p class="m-0 font-medium">Finance Modifiers</p>
+          <button type="button" class="button-base h-10 flex items-center gap-2 px-4 py-2 text-base" (click)="addModifierRow(financeModifiers)"
+                  [disabled]="financeModifiers.length >= maxModifierRows">
+            <img src="assets/icons/add-icon.svg" alt="" class="h-4 w-4" />
+            Add
+          </button>
+          @if (financeModifiers.length >= maxModifierRows) {
+            <span class="text-sm text-gray-700">Maximum {{ maxModifierRows }} rows.</span>
+          } @else {
+            <span class="text-sm text-gray-700">Click Add to add a row (up to {{ maxModifierRows }}).</span>
+          }
+        </div>
+        <div formArrayName="financeModifiers" class="flex min-w-0 flex-col gap-5">
+          @for (row of financeModifiers.controls; track row; let i = $index) {
+            <div class="max-w-full overflow-x-auto pb-5">
+              <div [formGroupName]="i" class="flex w-max min-w-full flex-nowrap items-end gap-3 md:gap-4">
+                <div class="flex w-48 shrink-0 flex-col sm:w-56">
+                  <label class="mb-2 font-medium">Name</label>
+                  <input type="text" class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                         formControlName="name" />
+                </div>
+                <div class="flex w-48 shrink-0 flex-col sm:w-56">
+                  <label class="mb-2 font-medium">Values</label>
+                  <input type="text" class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                         placeholder="Up to 10 comma-separated values"
+                         formControlName="values" />
+                  @if (row.controls.values.errors?.['maxCommaSeparatedEntries']) {
+                    <small class="validation-message mt-1 block">Maximum 10 comma-separated values allowed</small>
+                  }
+                </div>
+                <div class="flex w-64 shrink-0 flex-col sm:w-72">
+                  <label class="mb-2 font-medium">Details/Purpose</label>
+                  <textarea rows="1"
+                            class="w-full resize-none bg-white px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                            formControlName="detailsPurpose"></textarea>
+                </div>
+                <div class="flex w-64 shrink-0 flex-col sm:w-72">
+                  <label class="mb-2 font-medium">Expected Behavior when selected</label>
+                  <textarea rows="1"
+                            class="w-full resize-none bg-white px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                            formControlName="expectedBehaviorWhenSelected"></textarea>
+                </div>
+                <button type="button" class="shrink-0 hover:cursor-pointer"
+                        (click)="removeModifierRow(financeModifiers, i)" title="Delete">
+                  <img src="assets/icons/remove-icon.svg" alt="Delete" class="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Process Modifiers -->
+      <div class="mt-10 border-t border-gray-300 pt-8">
+        <div class="mb-4 flex flex-wrap items-center gap-3">
+          <p class="m-0 font-medium">Process Modifiers</p>
+          <button type="button" class="button-base h-10 flex items-center gap-2 px-4 py-2 text-base" (click)="addModifierRow(processModifiers)"
+                  [disabled]="processModifiers.length >= maxModifierRows">
+            <img src="assets/icons/add-icon.svg" alt="" class="h-4 w-4" />
+            Add
+          </button>
+          @if (processModifiers.length >= maxModifierRows) {
+            <span class="text-sm text-gray-700">Maximum {{ maxModifierRows }} rows.</span>
+          } @else {
+            <span class="text-sm text-gray-700">Click Add to add a row (up to {{ maxModifierRows }}).</span>
+          }
+        </div>
+        <div formArrayName="processModifiers" class="flex min-w-0 flex-col gap-5">
+          @for (row of processModifiers.controls; track row; let i = $index) {
+            <div class="max-w-full overflow-x-auto pb-5">
+              <div [formGroupName]="i" class="flex w-max min-w-full flex-nowrap items-end gap-3 md:gap-4">
+                <div class="flex w-48 shrink-0 flex-col sm:w-56">
+                  <label class="mb-2 font-medium">Name</label>
+                  <input type="text" class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                         formControlName="name" />
+                </div>
+                <div class="flex w-48 shrink-0 flex-col sm:w-56">
+                  <label class="mb-2 font-medium">Values</label>
+                  <input type="text" class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                         placeholder="Up to 10 comma-separated values"
+                         formControlName="values" />
+                  @if (row.controls.values.errors?.['maxCommaSeparatedEntries']) {
+                    <small class="validation-message mt-1 block whitespace-nowrap">Maximum 10 comma-separated values allowed</small>
+                  }
+                </div>
+                <div class="flex w-64 shrink-0 flex-col sm:w-72">
+                  <label class="mb-2 font-medium">Details/Purpose</label>
+                  <textarea rows="1"
+                            class="w-full resize-none bg-white px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                            formControlName="detailsPurpose"></textarea>
+                </div>
+                <div class="flex w-64 shrink-0 flex-col sm:w-72">
+                  <label class="mb-2 font-medium">Expected Behavior when selected</label>
+                  <textarea rows="1"
+                            class="w-full resize-none bg-white px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                            formControlName="expectedBehaviorWhenSelected"></textarea>
+                </div>
+                <button type="button" class="shrink-0 hover:cursor-pointer"
+                        (click)="removeModifierRow(processModifiers, i)" title="Delete">
+                  <img src="assets/icons/remove-icon.svg" alt="Delete" class="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+         <div class="accordion">
+  <input #inputStep6 type="radio" class="accordion-input" name="steps" id="step6">
+  <label class="accordion-label" for="step6">Step 6 - Considerations</label>
+
+  <!-- Parent flex row with equal height -->
+  <div class="accordion-content flex flex-col md:flex-row gap-6 items-stretch">
+    
+    <!-- Left Section -->
+    <div class="w-full md:w-1/2 flex flex-col space-y-6 h-full">
+      <!-- Anything Else -->
+
+       <div class="flex flex-col flex-1">
+        <label class="font-medium mb-2">Who is the Migration POC ? <span class="required">*</span></label>
+        <input type="text"
+               class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+               formControlName="considerMigrationPoc" />
+        @if (submitted && customerOnboardingForm.controls.considerMigrationPoc.errors) {
+          <small class="validation-message mt-1 block">Enter migration POC</small>
+        }
+      </div>
+    
+  <!-- Operational Owner -->
+      <div class="flex flex-col flex-1">
+        <label class="font-medium mb-2">Who is the Operational Owner of the account ? <span class="required">*</span></label>
+        <input type="text"
+               class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+               formControlName="considerOperationalOwnerAccount" />
+        @if (submitted && customerOnboardingForm.controls.considerOperationalOwnerAccount.errors) {
+          <small class="validation-message mt-1 block">Enter operational owner</small>
+        }
+      </div>
+
+      <!-- Urgent Deployment (target date) -->
+      <div class="flex flex-col flex-1">
+        <label class="font-medium mb-2">How urgent is this deployment ? <span class="required">*</span></label>
+        <input type="date"
+               class="w-full border-b-2 bg-white px-2 py-1 md:max-w-60 focus:border-accordion-bg focus:outline-none"
+               formControlName="considerUrgentDeployment"
+               [min]="minDeploymentDate" />
+        @if (submitted && customerOnboardingForm.controls.considerUrgentDeployment.errors) {
+          <small class="validation-message mt-1 block">Select deployment date</small>
+        }
+      </div>
+
+    
+    </div>
+
+    <!-- Right Section -->
+    <div class="w-full md:w-1/2 flex flex-col space-y-6 h-full">
+      <!--  Account Manager -->
+      <div class="flex flex-col flex-1">
+        <label class="font-medium mb-2">Who is the Account Manager ? <span class="required">*</span></label>
+        <input type="text"
+               class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+               formControlName="considerAccountManager" />
+        @if (submitted && customerOnboardingForm.controls.considerAccountManager.errors) {
+          <small class="validation-message mt-1 block">Enter account manager</small>
+        }
+      </div>
+
+      <!-- Migration POC -->
+        <div class="flex flex-col flex-1">
+        <label class="font-medium mb-2">Anything Else you want us to consider ?</label>
+        <textarea drtAutoExpandTextArea [maxRows]="5" rows="2"
+               class="w-full min-h-12 resize-none bg-white px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+               formControlName="considerAnythingElse"></textarea>
+      </div>
+
+      <div class="flex items-center justify-center gap-4 mt-4">
+        <button type="button" class="button-base text-xl w-4xs" (click)="onReset()">
+          Reset
+        </button>
+        <button type="button" class="button-base text-xl w-4xs" (click)="onSubmit()"
+                [disabled]="isFormSubmitted || (isSubmittingForm$ | async)"
+                [class.opacity-50]="isFormSubmitted || (isSubmittingForm$ | async)"
+                [class.cursor-not-allowed]="isFormSubmitted || (isSubmittingForm$ | async)">
+          Submit
+        </button>
+      </div>
+
+      <div class="mt-2 self-center space-y-2 text-center">
+        @if (isSubmittingForm$ | async) {
+          <div class="spinner"></div>
+        }
+        @if (submitFormMessage$ | async; as msg) {
+           <p class="text-green-600" [innerHTML]="msg"></p>
+        }
+        @if (submitFormErrorMessage$ | async; as err) {
+          <small class="text-red-600">{{ err }}</small>
+        }
+      </div>
+    </div>
+
+  </div>
+       </div>
+            </div>
+            </form>
+    </div>  

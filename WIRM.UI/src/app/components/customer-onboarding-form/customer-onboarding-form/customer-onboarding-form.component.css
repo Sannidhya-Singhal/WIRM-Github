@@ -1,0 +1,108 @@
+@import 'tailwindcss';
+
+.accordion {
+    @apply  text-white mb-2
+}
+.accordion:first-child {
+    @apply mt-2;
+}
+.accordion-input {
+    @apply opacity-0 -z-1 absolute
+}
+.accordion-content {
+    @apply text-black m-5 flex flex-col md:flex-row gap-6 items-stretch;
+}
+
+.accordion-label {
+    @apply flex justify-between p-2 text-xl font-bold cursor-pointer rounded-xl bg-accordion-bg
+}
+.accordion-label:hover {
+    @apply bg-accordion-hover
+}
+.accordion-label::after {
+    content: "\276F";
+    @apply transition-all
+}
+.accordion-input:checked + .accordion-label::after {
+    @apply rotate-90
+}
+.accordion-input ~ .accordion-content {
+    display: none;
+}
+.accordion-input:checked ~ .accordion-content {
+    @apply flex flex-wrap md:flex-nowrap;
+}
+input[type="radio"] {
+    @apply mr-2
+}
+input[type="checkbox"] {
+    @apply mr-2
+}
+input[type="text"] {
+    @apply border bg-white placeholder:italic placeholder:text-gray-500 w-full
+}
+input[type="date"] {
+    @apply border bg-white w-full
+}
+input:focus::placeholder {
+    color: transparent;
+}
+input[type="text"]:focus {
+    @apply transition-all duration-300 ease-in-out outline-none shadow-lg border-blue-500 border-[2px]
+}
+input[type="date"]:focus {
+    @apply transition-all duration-300 ease-in-out outline-none shadow-lg border-blue-500 border-[2px]
+}
+label {
+    @apply mr-2
+}
+textarea {
+    @apply w-full bg-white leading-6 border placeholder:text-gray-500 placeholder:italic pl-2 pr-2 
+}
+textarea:focus::placeholder {
+    color: transparent;
+}
+textarea:focus {
+    @apply transition-all duration-300 ease-in-out outline-none shadow-lg border-blue-500 border-[2px]
+}
+@theme {
+    --color-accordion-bg: #cc3f00;
+    --color-accordion-hover: #cc7e00;   
+}
+.required {
+  color: red;
+}
+
+/* Toggle switch for On/Off module settings */
+.toggle-switch {
+  @apply relative inline-block w-12 h-6 shrink-0;
+}
+.toggle-switch input {
+  @apply opacity-0 w-0 h-0 absolute;
+}
+.toggle-slider {
+  @apply absolute inset-0 cursor-pointer rounded-full bg-gray-300 transition-colors duration-200;
+}
+.toggle-slider::before {
+  content: "";
+  @apply absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-transform duration-200;
+}
+.toggle-switch input:checked + .toggle-slider {
+  @apply bg-accordion-bg;
+}
+.toggle-switch input:checked + .toggle-slider::before {
+  @apply translate-x-6;
+}
+
+/* Multi-select dropdown for Process Specifics */
+.multi-select-toggle {
+  @apply w-full border border-gray-300 bg-white px-2 py-1 text-left text-sm text-black
+         truncate cursor-pointer hover:border-gray-500 focus:border-blue-500 focus:outline-none;
+}
+.multi-select-panel {
+  @apply z-50 mt-1 max-h-48 w-full overflow-y-auto
+         rounded border border-gray-300 bg-white shadow-lg;
+}
+.multi-select-option {
+  @apply flex items-center gap-2 px-3 py-1.5 text-sm text-black cursor-pointer hover:bg-gray-100;
+}

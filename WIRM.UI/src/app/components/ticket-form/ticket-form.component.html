@@ -1,0 +1,511 @@
+<div class="container-outline lg:place-self-center lg:max-w-[1200px]">
+    <form (keydown.enter)="onEnterPress($event)" [formGroup]="ticketForm">
+        <div class="shadow-2xl rounded-xl m-auto">
+            <div class="accordion">
+                <input #inputStep1 type="radio" class="accordion-input" name="steps" id="step1" checked>
+                <label class="accordion-label" for="step1">Step 1 - Ticket Type</label>
+
+                <div class="accordion-content space-y-6">
+                    <!-- Product type -->
+                    <div class="flex flex-col gap-2">
+                        <p class="font-medium mb-2">
+                            Please specify which application, product, tool, or solution this request relates to <span
+                                class="required">*</span>
+                        </p>
+
+                        <!-- Loop over ProductTypes -->
+                        @for (type of ProductTypes; track $index) {
+                        <div class="flex flex-col gap-2">
+
+                          <!-- Main radio -->
+                          <div class="flex items-center gap-2">
+                            <input type="radio" name="productType" [id]="type"
+                                   [formControl]="ticketForm.controls.productType" [value]="type" />
+                            <label [for]="type">
+                              {{ type }}
+                            </label>
+                          </div>
+
+                          <!-- Conditionally show sub-options (inside the correct block) -->
+                          @if (isLionbridgeCore && type ===
+                          'Lionbridge Core Technology') {
+                          <div class="pl-6 flex flex-col gap-2 mt-1">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 w-fit">
+                              @for (sub of subProductOptions['Lionbridge Core Technology']; track $index) {
+                              <div class="flex items-center gap-2">
+                                <input type="radio" name="subProductType" [id]="sub"
+                                       formControlName="subProductType" [value]="sub" />
+                                <label [for]="sub">{{ sub }}</label>
+
+                                @if (sub === 'Others' && ticketForm.controls.subProductType.value === 'Others')
+                                {
+                                <input placeholder="Others"
+                                       class="max-w-64 px-1 py-0 border-b-2 focus:outline-none focus:border-accordion-bg"
+                                       type="text" formControlName="subProductTypeOther">
+                                }
+
+                              </div>
+                              }
+                            </div>
+                          </div>
+                          }
+
+                          <!-- Conditionally show textarea -->
+                          @if (isCustomApp &&
+                          type === 'Custom Application, Tool, Solution or Script') {
+                          <div class="pl-6 mt-2">
+                            <p class="font-medium mb-2">
+                              Which custom application, tool, solution or script is involved?
+                            </p>
+                            <textarea rows="2" placeholder="Enter application,tool,solution or script name"
+                                      class="max-w-84 border-b-2 mt-4 tm focus:outline-none focus:border-accordion-bg"
+                                      formControlName="productDescription"></textarea>
+                          </div>
+                          }
+                        </div>
+                        }
+                       
+                        @if (submitted && ticketForm.controls.productType.invalid) {
+                        <div class="w-full text-left">
+                            <small class="validation-message">Select application, product, tool, or solution</small>
+                        </div>
+                        }
+
+                        @if(showCustomAppDescriptionError){
+                        <div class="w-full text-left">
+                          <small class="validation-message">Enter custom application, tool, solution or script</small>
+                        </div>
+                        }
+
+                        @if(showLionbridgeSubProductError){
+
+                        <div class="w-full text-left">
+                            <small class="validation-message">Select lionbridge core technology product</small>
+                        </div>
+                        }
+
+                        @if(showLionbridgeOtherProductError){
+                        <div class="w-full text-left">
+                            <small class="validation-message">Enter other lionbridge core technology product</small>
+                        </div>
+                        }
+                         <div class="w-full text-left">
+                            <p class="font-medium mb-2 mt-5">
+                                Note: Bug fixes for Lionbridge Core Technologies should be logged with Lionbridge
+                                Support in Zendesk (<a
+                                    href="mailto:ServiceDesk&#64;lionbridge.com">ServiceDesk&#64;lionbridge.com</a>)
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <!-- Ticket Type -->
+                    <div class="w-full">
+                        <div class="flex flex-col gap-2">
+                            <p class="font-medium mb-2">
+                                Please select request type <span class="required">*</span>
+                            </p>
+                            @for (type of ticketTypes; track $index) {
+                            <div class="w-full px-2 space-y-3">
+                                <div class="flex items-center gap-2">
+                                    @if(!type.isHidden){
+                                    <input type="radio" [id]="type.id" name="ticketType" formControlName="ticketType"
+                                        [value]="type.id" />
+                                    <label [for]="type.id">{{ type.name}}</label>
+                                    }
+                                </div>
+                                @let ticketType = ticketForm.controls.ticketType.value;
+
+                                @if (type.canFindReference && ticketType === type.id) {
+                                <div class="flex flex-col space-y-2 pl-4">
+                                    <p class="font-medium mb-2">Enter previous OPR ticket no. (if available)</p>
+                                    <input
+                                        class="max-w-64 px-3 py-0 border-b-2 focus:outline-none focus:border-accordion-bg"
+                                        type="text" formControlName="referenceWorkItemId" />
+
+                                    @if (isVerifying$ | async) {
+                                    <span class="text-blue-500 text-sm mt-1 flex items-center gap-2">
+                                        Verifying ticket number...
+                                        <div class="spinner"></div>
+                                    </span>
+                                    }
+
+                                    @if (verificationError$ | async) {
+                                    <small class="validation-message">{{ verificationError$ | async }}</small>
+                                    }
+                                </div>
+                                }
+                            </div>
+                            }
+                            @if (submitted && ticketForm.controls.ticketType.invalid) {
+                            <div class="w-full text-left">
+                                <small class="validation-message">Select a ticket type</small>
+                            </div>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <input #inputStep2 type="radio" class="accordion-input" name="steps" id="step2">
+                <label class="accordion-label" for="step2">Step 2 - Ticket Status</label>
+                <div class="accordion-content space-y-10"> <!-- space between main groups -->
+
+                    <!-- Left Section -->
+                    <div class="w-full md:w-1/3 flex flex-col gap-4">
+
+                        <!-- 1. Production Block -->
+                        <div>
+                            <p class="font-medium mb-2"> Production Block</p>
+                            <div class="flex flex-wrap items-center gap-1">
+                                <input type="radio" id="production-block-yes" name="productionBlock"
+                                    formControlName="productionBlock" [value]="true">
+                                <label for="production-block-yes">Yes</label>
+
+                                <input type="radio" id="production-block-no" name="productionBlock"
+                                    formControlName="productionBlock" [value]="false">
+                                <label for="production-block-no">No</label>
+                            </div>
+                        </div>
+
+                        <!-- 2. Workaround Available -->
+                        <div>
+                            <p class="font-medium mb-2"> Workaround Available</p>
+                            <div class="flex flex-wrap items-center gap-1">
+                                <input type="radio" id="workaround-yes" name="hasWorkaround"
+                                    formControlName="hasWorkaround" [value]="true">
+                                <label for="workaround-yes">Yes</label>
+
+                                <input type="radio" id="workaround-no" name="hasWorkaround"
+                                    formControlName="hasWorkaround" [value]="false">
+                                <label for="workaround-no">No</label>
+                            </div>
+                        </div>
+
+                        <!-- 3. Business Driver -->
+                        <div>
+                            <p class="font-medium mb-2"> Business Driver <span class="required">*</span></p>
+                            <div class="flex flex-col gap-2">
+                                @for (type of businessDriverTypes; track $index) {
+                                <div class="flex items-center gap-1">
+                                    <input type="radio" name="businessDriver" [id]="type"
+                                        formControlName="businessDriver" [value]="type" />
+                                    <label [for]="type">{{ type | kebabToWord }}</label>
+                                </div>
+                                }
+                            </div>
+                            @if (submitted && ticketForm.controls.businessDriver.errors) {
+                            <small class="validation-message mt-1">Select a business driver</small>
+                            }
+                        </div>
+
+                    </div>
+
+                    <!-- Right Section -->
+                    <div class="w-full md:w-1/3 flex flex-col gap-4">
+
+                        <!-- 4. Firm Deadline -->
+                        <div>
+                            <p class="font-medium mb-2">Firm Deadline</p>
+
+                            <div class="flex flex-wrap items-center gap-2">
+                                <!-- Radio: Yes -->
+                                <input type="radio" id="firm-deadline-yes" name="hasFirmDeadline"
+                                    formControlName="hasFirmDeadline" [value]="true">
+                                <label for="firm-deadline-yes">Yes</label>
+
+                                <!-- Date Input only if "Yes" is selected -->
+                                @if (ticketForm.controls.hasFirmDeadline.value) {
+                                <div class="flex flex-col">
+                                    <input type="datetime-local"
+                                        class="border-b-2 px-3 py-2 text-base focus:border-accordion-bg focus:outline-none"
+                                        placeholder="Select date" formControlName="deadline" [min]="minDateTime" />
+
+                                    @if (submitted && ticketForm.controls.deadline.errors) {
+                                    <small class="text-red-500 text-sm mt-1">Select date of deadline.</small>
+                                    }
+                                </div>
+                                }
+
+                                <!-- Radio: No -->
+                                <input type="radio" id="firm-deadline-no" name="hasFirmDeadline"
+                                    formControlName="hasFirmDeadline" [value]="false">
+                                <label for="firm-deadline-no">No</label>
+                            </div>
+
+                            <!-- Textarea below (unchanged) -->
+                            
+                             @if (ticketForm.controls.hasFirmDeadline.value) {
+                             <textarea drtAutoExpandTextArea rows="2" placeholder="Business justification"
+                                class="max-w-84 border-b-2 mt-4 tm focus:outline-none focus:border-accordion-bg"
+                                formControlName="deadlineJustification"></textarea>
+                            } 
+                        </div>
+
+                        <!-- 5. Estimated Value -->
+                        <div>
+                            <p class="font-medium mb-2"> Estimated value of business driver(USD per month) <span
+                                    class="required">*</span></p>
+                            <div class="flex flex-col gap-2">
+                                <div class="grid grid-cols-1 gap-x-4 gap-y-2 w-fit">
+                                    @for (type of revenueTypes; track type.key) {
+                                    <div class="flex items-center gap-1">
+                                        <input type="radio" name="revenue" [id]="type.key" formControlName="revenue"
+                                            [value]="type.key" />
+                                        <label [for]="type.key">{{ type.label }}</label>
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+
+
+                            @if (submitted && ticketForm.controls.revenue.errors) {
+                            <small class="validation-message mt-1">Select an estimated value of business driver</small>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="accordion">
+                <input #inputStep3 type="radio" class="accordion-input" name="steps" id="step3">
+                <label class="accordion-label" for="step3">Step 3 - Customer Information / Vertical Information</label>
+
+                <div class="accordion-content flex flex-wrap md:flex-nowrap">
+
+                    <!-- Left Column -->
+                    <div class="w-full md:w-1/2 flex flex-col gap-4">
+                        <div class="flex flex-col space-y-6 w-full">
+                            <!-- Row for side-by-side inputs -->
+                            <div class="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0 w-full">
+
+                                <!-- Main Customer -->
+                                <div class="w-full md:w-1/2">
+                                    <p class="font-medium mb-2">Account Name <span class="required">*</span></p>
+                                    <input type="text"
+                                        class="max-w-84 px-1 py-0 border-b-2 focus:outline-none focus:border-accordion-bg"
+                                        formControlName="customerName" />
+                                    @if (submitted && ticketForm.controls.customerName.errors) {
+                                    <small class="validation-message mt-1 block">Enter account name</small>
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Original Requestor Side -->
+                            <div class="w-full">
+                                <p class="font-medium mb-2">Original Requestor <span class="required">*</span>
+                                </p>
+                                <div class="flex flex-wrap gap-4">
+                                    @for (type of originalRequestorTypes; track $index) {
+                                    <div class="flex items-center gap-1">
+                                        <input type="radio" name="originalRequestorSide" [id]="type"
+                                            formControlName="originalRequestorSide" [value]="type" />
+                                        <label [for]="type">{{ type }}</label>
+                                    </div>
+                                    }
+                                </div>
+                                @if (submitted && ticketForm.controls.originalRequestorSide.errors) {
+                                <small class="validation-message mt-1 block">Select requestor side</small>
+                                }
+                            </div>
+
+                            <!-- Emai of Customer/Lionbridge -->
+                            <div class="w-full">
+                                <p class="font-medium mb-2">Requestor Email Address <span class="required">*</span></p>
+                                <input id="email" type="text"
+                                    class="max-w-72 px-1 py-0 border-b-2 focus:outline-none focus:border-accordion-bg"
+                                    formControlName="requestEmailAddress" />
+
+                                <!-- Validation Messages -->
+                                @if (submitted && ticketForm.controls.requestEmailAddress.errors) {
+                                <small class="validation-message mt-1 block">Enter a valid email address</small>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="w-full md:w-1/2 flex flex-col gap-4">
+                        <!-- Vertical -->
+                        <div>
+                            <p class="font-medium mb-2">Vertical <span class="required">*</span></p>
+                            <div class="space-y-1">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 w-fit">
+                                    @for (type of verticalTypes; track $index) {
+                                    <div class="flex flex-wrap items-center gap-1">
+                                        <input type="radio" name="verticalType" [id]="type"
+                                            formControlName="verticalType" [value]="type" />
+                                        <label [for]="type">{{ type }}</label>
+
+                                        @if (type === 'Others' && ticketForm.controls.verticalType.value ===
+                                        'Others') {
+                                        <input type="text"
+                                            class="flex-1 min-w-[128px] max-w-[256px] border-b-2 px-3 py-0 focus:outline-none focus:border-accordion-bg"
+                                            formControlName="otherVerticalType" />
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+
+                            @if (submitted && ticketForm.controls.verticalType.errors) {
+                            <small class="validation-message mt-1 block">Select vertical</small>
+                            }
+                            @if (submitted && ticketForm.controls.otherVerticalType.errors) {
+                            <small class="validation-message mt-1 block">Enter Other Vertical Name</small>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="accordion">
+                <input type="radio" class="accordion-input" name="steps" id="step4">
+                <label class="accordion-label" for="step4">Step 4 - Ticket Details</label>
+
+                <div class="accordion-content flex flex-col lg:flex-row gap-6">
+
+                    <!-- LEFT COLUMN -->
+                    @if(isOtherProductSelected){
+                    <div class="flex flex-col w-full lg:w-1/3 space-y-6">
+
+                       
+
+                        <!-- Input File Types -->
+                        <div class="space-y-2">
+                            <p class="font-medium"> Input File Format</p>
+                            <div class="grid grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-2">
+                                @for (type of fileTypes; track $index) {
+                                <div class="flex items-center gap-1">
+                                    <input type="checkbox" [id]="type"
+                                        [formControl]="ticketForm.controls.inputFileTypes.at($index)" />
+                                    <label [for]="type">{{ type }}</label>
+                                </div>
+                                }
+                            </div>
+                            <div class="flex items-center gap-2 mt-2">
+                                <input type="checkbox" id="other-file-type" formControlName="hasOtherInputFileType" />
+                                <label for="other-file-type">Others</label>
+                                @if (ticketForm.controls.hasOtherInputFileType.value) {
+                                <input type="text"
+                                    class="max-w-64 px-1 py-0 border-b-2 focus:outline-none focus:border-accordion-bg"
+                                    formControlName="otherInputFileType" />
+                                }
+                            </div>
+                            <!-- @if (ticketForm.controls.otherInputFileType.errors) {
+                            <small class="validation-message mt-1 block">Enter other input file type(s)</small>
+                            } -->
+                        </div>
+
+                        <!-- Gemini Number -->
+                        <div class="space-y-2">
+                            <p class="font-medium"> Gemini Number</p>
+                            <input type="text"
+                                class="max-w-64 px-1 py-0 border-b-2 focus:outline-none focus:border-accordion-bg"
+                                formControlName="geminiNumber" />
+
+                        </div>
+                    </div>
+                    }
+
+                    <!-- RIGHT COLUMN -->
+                    <div class="flex flex-col w-full lg:flex-1 space-y-6">
+                        <!-- Attachment -->
+                        <div class="space-y-2">
+                            <p class="font-medium"> Attachment</p>
+                            @if (!(isTicketCreated$ | async)) {
+                            <button class="button-base w-40 h-10 flex items-center gap-2" (click)="fileInput.click()">
+                                <img src="assets/icons/paperclip-solid.svg" alt="Icon" class="h-5 w-5" />
+                                Upload file(s)
+                            </button>
+                            <input #fileInput class="hidden" type="file" multiple (change)="onFilesSelected($event)" />
+                            }
+
+                            <div class="text-s text-gray-500 space-y-1">
+                                <small>File number limit: 10. Single file size limit: 60MB</small>
+                                <small> Allowed file types: Word, Excel, PPT, PDF, Image, Video, Audio</small>
+                            </div>
+
+                            @if (uploadValidationMessages.length > 0) {
+                            <div class="flex flex-col space-y-1">
+                                @for (message of uploadValidationMessages; track $index) {
+                                <small class="validation-message">{{ message }}</small>
+                                }
+                            </div>
+                            }
+
+                            <!-- Uploaded files -->
+                            <div class="space-y-1">
+                                @for (attachment of attachments; track $index) {
+                                <div class="flex items-center justify-between">
+                                    <span class="truncate">{{ getFileName(attachment) }}</span>
+                                    <div class="flex items-center gap-2">
+                                        @let ext = getFileExtension(attachment);
+                                        @if (ext) {
+                                        <span>.{{ ext }}</span>
+                                        }
+                                        <button class="hover:cursor-pointer" type="button" (click)="removeFile($index)">
+                                            <img src="assets/icons/remove-icon.svg" alt="Remove" class="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <!-- Title -->
+                        <div>
+                            <p class="font-medium mb-2"> Title <span class="required">*</span></p>
+                            <input type="text"
+                                class="w-full px-3 py-0 border-b-2 focus:outline-none focus:border-accordion-bg"
+                                placeholder="Enter a short custom title for this ticket" formControlName="titlePart" />
+
+                                  @if (submitted && ticketForm.controls.titlePart.errors) {
+                            <small class="validation-message mt-1 block">Enter ticket title</small>
+                            }
+                        </div>
+                       
+
+                        <!-- Description -->
+                        <div>
+                            <p class="font-medium mb-2"> Description <span class="required">*</span></p>
+                            <textarea rows="12"
+                                class="w-full px-3 py-1 border border-gray-300 focus:outline-none focus:border-accordion-bg resize-none"
+                                placeholder="e.g. As a project manager, I need a simple automation tool so my team can track customer interactions more efficiently than using spreadsheets."
+                                formControlName="ticketDescription"></textarea>
+
+                                @if (submitted && ticketForm.controls.ticketDescription.errors) {
+                            <small class="validation-message mt-1 block">Enter ticket description</small>
+                            }
+                        </div>
+                         
+
+                        <!-- Submit Button -->
+                        @if (!(isTicketCreated$ | async)) {
+                        <button class="button-base text-xl w-4xs self-center mt-4" (click)="onSubmit()">
+                            Submit
+                        </button>
+                        }
+
+                        <!-- Submission Messages -->
+                        <div class="self-center text-center space-y-2 mt-2">
+                            @if (isSubmittingForm$ | async) {
+                            <div class="spinner"></div>
+                            }
+                            @if (submitFormMessage$ | async) {
+                            <p class="text-green-600" [innerHTML]="(submitFormMessage$ | async)"></p>
+                            }
+                            @if (submitFormErrorMessage$ | async) {
+                            <small class="text-red-600">{{ submitFormErrorMessage$.value }}</small>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
