@@ -106,3 +106,31 @@ textarea:focus {
 .multi-select-option {
   @apply flex items-center gap-2 px-3 py-1.5 text-sm text-black cursor-pointer hover:bg-gray-100;
 }
+/* Step 1 - Account Details layout overrides */
+.step-content {
+  @apply flex flex-col gap-6 w-full;
+}
+
+.toggle-row {
+  @apply flex flex-row flex-wrap gap-8 items-center;
+}
+
+.toggle-item {
+  @apply flex items-end gap-3;
+}
+
+.toggle-label-text {
+  @apply text-sm text-gray-500 mb-1;
+}
+
+.fields-row {
+  @apply flex flex-row flex-wrap gap-6 items-start w-full;
+}
+
+.field-col {
+  @apply flex flex-1 min-w-[180px] flex-col;
+}
+
+.divider {
+  @apply border-t border-gray-300 w-full;
+}

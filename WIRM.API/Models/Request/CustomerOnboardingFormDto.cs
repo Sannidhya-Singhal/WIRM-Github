@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using System.Net.Sockets;
+using System.Runtime.Intrinsics.X86;
 using System.Text.Json.Serialization;
 
 namespace WIRM.API.Controllers.CustomerOnboarding;
@@ -14,6 +15,9 @@ public class CustomerOnboardingFormDto
     public string CustomerGroupName { get; set; } = string.Empty;
     public string CustomerAccountName { get; set; } = string.Empty;
     public string CodaCode { get; set; } = string.Empty;
+    public bool IsExistingCustomer { get; set; } = false;
+    public bool IsFederatedAccessSSO { get; set; } = false;
+
 
     // Step 2 - Optional Module Settings
     public bool Validate { get; set; } = false;
@@ -26,6 +30,7 @@ public class CustomerOnboardingFormDto
     public string PrimaryUserFirstName { get; set; } = string.Empty;
     public string PrimaryUserLastName { get; set; } = string.Empty;
     public string PrimaryUserEmailAddress { get; set; } = string.Empty;
+    public string PrimaryUserPreferredLanguage { get; set; } = string.Empty;
     public List<OtherUserRowDto> OtherUsers { get; set; } = new();
 
     //Step 4 - Process Specifics
@@ -39,7 +44,7 @@ public class CustomerOnboardingFormDto
     //Step 6 - Considerations
     public string ConsiderAnythingElse { get; set; } = string.Empty;
     /// <summary>Date from <c>type="date"</c> input (<c>yyyy-MM-dd</c>).</summary>
-    public string ConsiderUrgentDeployment { get; set; } = string.Empty;
+    //public string ConsiderUrgentDeployment { get; set; } = string.Empty;
     public string ConsiderOperationalOwnerAccount { get; set; } = string.Empty;
 
     /// <summary>Angular control name typo preserved in JSON: <c>considerAccountManager</c>.</summary>
@@ -52,13 +57,7 @@ public class CustomerOnboardingFormDto
     {
         get
         {
-            var parts = new List<string>
-            {
-                CustomerAccountName,
-                CustomerGroupName,
-                DateTime.Now.ToString("yyyyMMdd")
-            };
-            return string.Join("_", parts);
+            return string.Join(" - ", new[] { "ONBOARD REQUEST", $"{CustomerGroupName} / {CustomerAccountName}" });
         }
     }
     [JsonIgnore]
@@ -71,6 +70,7 @@ public class OtherUserRowDto
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Role { get; set; } = string.Empty;
+    public string PrefferedLanguage { get; set; } = string.Empty;
 }
 
 public class CustomizedTemplateRowDto

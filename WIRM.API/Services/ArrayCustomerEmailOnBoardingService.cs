@@ -34,12 +34,14 @@ namespace WIRM.API.Services
             SendGridMessage emailMessage = new SendGridMessage()
             {
                 From = new EmailAddress(_configuration["EmailDetails:SolutionEngineeringEmail"]),
-                Subject = "Array: New Customer Migration Request",
+                Subject = customerOnboardingForm.TicketTitle,
                 HtmlContent = finalHtml
             };
             #region "To" and "Cc" Emails
-            var toEmails = _configuration.GetSection("EmailDetailsOnBoarding:To").Get<string[]>();
-            var ccEmails = _configuration.GetSection("EmailDetailsOnBoarding:Cc").Get<string[]>();
+            var toEmails = _configuration.GetSection("EmailDetailsOnBoarding:To").Get<List<string>>();
+            toEmails?.Add(customerOnboardingForm.LoggedInUserEmail);
+            var ccEmails = _configuration.GetSection("EmailDetailsOnBoarding:Cc").Get<List<string>>();
+            
             foreach (var to in toEmails)
             {
                 emailMessage.AddTo(to);

@@ -1,58 +1,90 @@
 <div class="container-outline lg:place-self-center lg:max-w-[1200px]">
       <form (keydown.enter)="onEnterPress($event)" [formGroup]="customerOnboardingForm" (ngSubmit)="onSubmit()">
         <div class="shadow-2xl rounded-xl m-auto">
-            <div class="accordion">
-                <input #inputStep1 type="radio" class="accordion-input" name="steps" id="step1" checked>
-                <label class="accordion-label" for="step1">Step 1 - Account Details</label>
-<div class="accordion-content w-full">
-  <div class="flex w-full flex-col gap-6 md:flex-row md:items-start">
-    <!-- Customer Group Name -->
-    <div class="flex min-w-0 flex-1 flex-col">
-      <label class="mb-2 font-medium">
-        Customer Group Name <span class="required">*</span>
-      </label>
-      <input
-        type="text"
-        class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
-        formControlName="customerGroupName"
-      />
-      @if (submitted && customerOnboardingForm.controls.customerGroupName.errors) {
-        <small class="validation-message mt-1 block">Enter customer group name</small>
-      }
-    </div>
+     <div class="accordion">
+  <input #inputStep1 type="radio" class="accordion-input" name="steps" id="step1" checked>
+  <label class="accordion-label" for="step1">Step 1 - Account Details</label>
 
-    <!-- Customer Account Name -->
-    <div class="flex min-w-0 flex-1 flex-col">
-      <label class="mb-2 font-medium">
-        Customer Account Name <span class="required">*</span>
-      </label>
-      <input
-        type="text"
-        class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
-        formControlName="customerAccountName"
-      />
-      @if (submitted && customerOnboardingForm.controls.customerAccountName.errors) {
-        <small class="validation-message mt-1 block">Enter customer account name</small>
-      }
-    </div>
+  <div class="accordion-content">
+    <div class="step-content">
 
-    <!-- CODA Code -->
-    <div class="flex min-w-0 flex-1 flex-col">
-      <label class="mb-2 font-medium">
-        CODA code(s) <span class="required">*</span>
-      </label>
-      <input
-        type="text"
-        class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
-        formControlName="codaCode"
-      />
-      @if (submitted && customerOnboardingForm.controls.codaCode.errors) {
-        <small class="validation-message mt-1 block">Enter CODA code(s)</small>
-      }
+      <!-- Row 1: Toggles -->
+      <div class="toggle-row">
+
+        <div class="toggle-item">
+          <div class="flex flex-col">
+            <label class="mb-2 font-medium">Existing Client</label>
+            <div class="flex items-center gap-2">
+              <label class="toggle-switch">
+                <input type="checkbox" formControlName="existingClient" />
+                <span class="toggle-slider"></span>
+              </label>
+              <span class="toggle-label-text">
+                {{ customerOnboardingForm.controls.existingClient.value ? 'Yes' : 'No' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="toggle-item">
+          <div class="flex flex-col">
+            <label class="mb-2 font-medium">Federated Access (SSO)</label>
+            <div class="flex items-center gap-2">
+              <label class="toggle-switch">
+                <input type="checkbox" formControlName="federatedAccessSSO" />
+                <span class="toggle-slider"></span>
+              </label>
+              <span class="toggle-label-text">
+                {{ customerOnboardingForm.controls.federatedAccessSSO.value ? 'Yes' : 'No' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Divider -->
+      <div class="divider"></div>
+
+      <!-- Row 2: Three input fields -->
+      <!-- Row 2: Three input fields -->
+<div class="fields-row">
+
+  <div class="field-col">
+    <label class="mb-2 font-medium">Customer Group Name <span class="required">*</span></label>
+    <input type="text"
+           class="w-full border-b-2 px-2 py-1 focus:border-accordion-bg focus:outline-none"
+           formControlName="customerGroupName" />
+    @if (submitted && customerOnboardingForm.controls.customerGroupName.errors) {
+      <small class="validation-message mt-1 block">Enter customer group name</small>
+    }
+  </div>
+
+  <div class="field-col">
+    <label class="mb-2 font-medium">Customer Account Name <span class="required">*</span></label>
+    <input type="text"
+           class="w-full border-b-2 px-2 py-1 focus:border-accordion-bg focus:outline-none"
+           formControlName="customerAccountName" />
+    @if (submitted && customerOnboardingForm.controls.customerAccountName.errors) {
+      <small class="validation-message mt-1 block">Enter customer account name</small>
+    }
+  </div>
+
+  <div class="field-col">
+    <label class="mb-2 font-medium">CODA code(s) <span class="required">*</span></label>
+    <input type="text"
+           class="w-full border-b-2 px-2 py-1 focus:border-accordion-bg focus:outline-none"
+           formControlName="codaCode" />
+    @if (submitted && customerOnboardingForm.controls.codaCode.errors) {
+      <small class="validation-message mt-1 block">Enter CODA code(s)</small>
+    }
+  </div>
+
+</div>
+
     </div>
   </div>
 </div>
-            </div>
 
        <div class="accordion">
   <input #inputStep2 type="radio" class="accordion-input" name="steps" id="step2">
@@ -87,12 +119,32 @@
       </div>
       <div class="flex min-w-0 items-center gap-3">
         <label class="toggle-switch">
-          <input type="checkbox" formControlName="msp" />
+          <input type="checkbox"
+                 [checked]="customerOnboardingForm.controls.msp.value"
+                 (change)="onMspToggle($event)" />
           <span class="toggle-slider"></span>
         </label>
         <span class="font-medium">MSP</span>
         <span class="text-sm text-gray-500">{{ customerOnboardingForm.controls.msp.value ? 'On' : 'Off' }}</span>
       </div>
+
+      <!-- MSP Confirmation Dialog -->
+      @if (showMspConfirm) {
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div class="mx-4 w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl">
+            <h2 class="mb-3 text-lg font-bold text-gray-800">Enable MSP?</h2>
+            <p class="mb-6 text-gray-600">Are you sure? This is for high-paying enterprise customers only.</p>
+            <div class="flex justify-end gap-3">
+              <button type="button"
+                      class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                      (click)="onMspCancel()">No, keep off</button>
+              <button type="button"
+                      class="rounded-lg bg-[#cc3f00] px-4 py-2 text-sm font-medium text-white hover:bg-[#cc7e00]"
+                      (click)="onMspConfirm()">Yes, switch on</button>
+            </div>
+          </div>
+        </div>
+      }
       <div class="flex min-w-0 items-center gap-3">
         <label class="toggle-switch">
           <input type="checkbox" formControlName="insights" />
@@ -113,35 +165,48 @@
    <div class="accordion-content w-full items-stretch">
     <div class="flex w-full min-w-0 flex-col">
       <p class="mb-4 font-medium">Primary User Details <span class="required">*</span></p>
-      <div class="flex w-full flex-col gap-6 md:flex-row md:items-start">
-        <div class="flex min-w-0 flex-1 flex-col">
+      <div class="flex w-full flex-col gap-6 md:flex-row md:flex-nowrap md:items-start">
+        <div class="flex min-w-0 flex-1 flex-col md:max-w-70">
           <label class="mb-2 font-medium">Primary User's First Name <span class="required">*</span></label>
           <input type="text"
-                 class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                 class="w-full border-b-2 px-2 py-1 focus:border-accordion-bg focus:outline-none"
                  formControlName="primaryUserFirstName" />
           @if (submitted && customerOnboardingForm.controls.primaryUserFirstName.errors) {
             <small class="validation-message mt-1 block">Enter primary user first name</small>
           }
         </div>
-        <div class="flex min-w-0 flex-1 flex-col">
+        <div class="flex min-w-0 flex-1 flex-col md:max-w-70">
           <label class="mb-2 font-medium">Primary User's Last Name <span class="required">*</span></label>
           <input type="text"
-                 class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                 class="w-full border-b-2 px-2 py-1 focus:border-accordion-bg focus:outline-none"
                  formControlName="primaryUserLastName" />
           @if (submitted && customerOnboardingForm.controls.primaryUserLastName.errors) {
             <small class="validation-message mt-1 block">Enter primary user last name</small>
           }
         </div>
-        <div class="flex min-w-0 flex-1 flex-col">
+        <div class="flex min-w-0 flex-1 flex-col md:max-w-83">
           <label class="mb-2 font-medium">Primary user email address <span class="required">*</span></label>
           <input type="text"
-                 class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                 class="w-full border-b-2 px-2 py-1 focus:border-accordion-bg focus:outline-none"
                  formControlName="primaryUserEmailAddress" />
           @if (submitted && customerOnboardingForm.controls.primaryUserEmailAddress.errors?.['required']) {
             <small class="validation-message mt-1 block">Enter primary user email address</small>
           }
           @if (submitted && customerOnboardingForm.controls.primaryUserEmailAddress.errors?.['email']) {
             <small class="validation-message mt-1 block">Enter a valid email address</small>
+          }
+        </div>
+        <div class="flex min-w-0 flex-1 flex-col md:max-w-48">
+          <label class="mb-2 font-medium">Preferred Language <span class="required">*</span></label>
+          <select class="w-full border-b-2 border-gray-500 bg-white px-2 py-1 text-black focus:border-accordion-bg focus:outline-none"
+                  formControlName="primaryUserPreferredLanguage">
+            <option value="">-- Select --</option>
+            @for (language of preferredLanguageOptions; track language) {
+              <option [value]="language">{{ language }}</option>
+            }
+          </select>
+          @if (submitted && customerOnboardingForm.controls.primaryUserPreferredLanguage.errors?.['required']) {
+            <small class="validation-message mt-1 block">Select preferred language</small>
           }
         </div>
       </div>
@@ -192,34 +257,43 @@
           @for (row of otherUsers.controls; track row; let i = $index) {
             <!-- overflow-x-auto: accordion uses overflow-hidden; row + Delete can exceed width — scroll instead of clipping -->
             <div class="max-w-full overflow-x-auto pb-1">
-              <div [formGroupName]="i"
-                   class="flex w-max min-w-full flex-nowrap items-end gap-3 md:gap-4">
-                <div class="flex w-48 shrink-0 flex-col sm:w-65">
+              <div [formGroupName]="i" class="flex w-max min-w-full flex-nowrap items-end gap-2 md:gap-3">
+                <div class="flex w-44 shrink-0 flex-col sm:w-52">
                   <label class="mb-2 font-medium">First Name</label>
                   <input type="text"
-                         class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                         class="w-full border-b-2 px-2 py-1 md:max-w-60 focus:border-accordion-bg focus:outline-none"
                          formControlName="firstName" />
                 </div>
-                <div class="flex w-48 shrink-0 flex-col sm:w-65">
+                <div class="flex w-44 shrink-0 flex-col sm:w-52">
                   <label class="mb-2 font-medium">Last Name</label>
                   <input type="text"
-                         class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                         class="w-full border-b-2 px-2 py-1 md:max-w-60 focus:border-accordion-bg focus:outline-none"
                          formControlName="lastName" />
                 </div>
-                <div class="flex w-48 shrink-0 flex-col sm:w-65">
+                <div class="flex w-60 shrink-0 flex-col sm:w-68">
                   <label class="mb-2 font-medium">E-mail</label>
                   <input type="text"
-                         class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
+                         class="w-full border-b-2 px-2 py-1 md:max-w-64 focus:border-accordion-bg focus:outline-none"
                          formControlName="email" />
                 </div>
-                <div class="flex w-48 shrink-0 flex-col sm:w-65">
+                <div class="flex w-40 shrink-0 flex-col sm:w-48 md:-ml-1">
                   <label class="mb-2 font-medium">Role</label>
-                  <select class="w-full border-b-2 border-gray-500 bg-white px-2 py-1 md:max-w-80 text-black focus:border-accordion-bg focus:outline-none"
+                  <select class="w-full border-b-2 border-gray-500 bg-white px-2 py-1 md:max-w-60 text-black focus:border-accordion-bg focus:outline-none"
                           formControlName="role">
                     <option value="">-- Select --</option>
                     <option value="Super User">Super User</option>
                     <option value="Standard">Standard</option>
                     <option value="Reviewer">Reviewer</option>
+                  </select>
+                </div>
+                <div class="flex w-40 shrink-0 flex-col sm:w-48">
+                  <label class="mb-2 font-medium">Preferred Language</label>
+                  <select class="w-full border-b-2 border-gray-500 bg-white px-2 py-1 md:max-w-60 text-black focus:border-accordion-bg focus:outline-none"
+                          formControlName="preferredLanguage">
+                    <option value="">-- Select --</option>
+                    @for (language of preferredLanguageOptions; track language) {
+                      <option [value]="language">{{ language }}</option>
+                    }
                   </select>
                 </div>
                 <button type="button" class="shrink-0 hover:cursor-pointer"
@@ -371,7 +445,7 @@
         <div formArrayName="businessModifiers" class="flex min-w-0 flex-col gap-5">
           @for (row of businessModifiers.controls; track row; let i = $index) {
             <div class="max-w-full overflow-x-auto pb-5">
-              <div [formGroupName]="i" class="flex w-max min-w-full flex-nowrap items-end gap-3 md:gap-4">
+              <div [formGroupName]="i" class="flex w-max min-w-full flex-nowrap items-start gap-3 md:gap-4">
                 <div class="flex w-48 shrink-0 flex-col sm:w-56">
                   <label class="mb-2 font-medium">Name</label>
                   <input type="text" class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
@@ -384,7 +458,7 @@
                             placeholder="Up to 10 comma-separated values"
                          formControlName="values"></textarea>
                   @if (row.controls.values.errors?.['maxCommaSeparatedEntries']) {
-                   <small class="validation-message mt-1 block">Maximum 10 comma-separated values allowed</small>
+                   <small class="validation-message mt-1 block whitespace-nowrap text-xs">Max 10 values allowed</small>
                   }
                 </div>
                 <div class="flex w-64 shrink-0 flex-col sm:w-72">
@@ -427,7 +501,7 @@
         <div formArrayName="financeModifiers" class="flex min-w-0 flex-col gap-5">
           @for (row of financeModifiers.controls; track row; let i = $index) {
             <div class="max-w-full overflow-x-auto pb-5">
-              <div [formGroupName]="i" class="flex w-max min-w-full flex-nowrap items-end gap-3 md:gap-4">
+              <div [formGroupName]="i" class="flex w-max min-w-full flex-nowrap items-start gap-3 md:gap-4">
                 <div class="flex w-48 shrink-0 flex-col sm:w-56">
                   <label class="mb-2 font-medium">Name</label>
                   <input type="text" class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
@@ -439,7 +513,7 @@
                          placeholder="Up to 10 comma-separated values"
                          formControlName="values" />
                   @if (row.controls.values.errors?.['maxCommaSeparatedEntries']) {
-                    <small class="validation-message mt-1 block">Maximum 10 comma-separated values allowed</small>
+                    <small class="validation-message mt-1 block whitespace-nowrap text-xs">Max 10 values allowed</small>
                   }
                 </div>
                 <div class="flex w-64 shrink-0 flex-col sm:w-72">
@@ -482,7 +556,7 @@
         <div formArrayName="processModifiers" class="flex min-w-0 flex-col gap-5">
           @for (row of processModifiers.controls; track row; let i = $index) {
             <div class="max-w-full overflow-x-auto pb-5">
-              <div [formGroupName]="i" class="flex w-max min-w-full flex-nowrap items-end gap-3 md:gap-4">
+              <div [formGroupName]="i" class="flex w-max min-w-full flex-nowrap items-start gap-3 md:gap-4">
                 <div class="flex w-48 shrink-0 flex-col sm:w-56">
                   <label class="mb-2 font-medium">Name</label>
                   <input type="text" class="w-full border-b-2 px-2 py-1 md:max-w-80 focus:border-accordion-bg focus:outline-none"
@@ -494,7 +568,7 @@
                          placeholder="Up to 10 comma-separated values"
                          formControlName="values" />
                   @if (row.controls.values.errors?.['maxCommaSeparatedEntries']) {
-                    <small class="validation-message mt-1 block whitespace-nowrap">Maximum 10 comma-separated values allowed</small>
+                    <small class="validation-message mt-1 block whitespace-nowrap text-xs">Max 10 values allowed</small>
                   }
                 </div>
                 <div class="flex w-64 shrink-0 flex-col sm:w-72">
@@ -551,21 +625,7 @@
         @if (submitted && customerOnboardingForm.controls.considerOperationalOwnerAccount.errors) {
           <small class="validation-message mt-1 block">Enter operational owner</small>
         }
-      </div>
-
-      <!-- Urgent Deployment (target date) -->
-      <div class="flex flex-col flex-1">
-        <label class="font-medium mb-2">How urgent is this deployment ? <span class="required">*</span></label>
-        <input type="date"
-               class="w-full border-b-2 bg-white px-2 py-1 md:max-w-60 focus:border-accordion-bg focus:outline-none"
-               formControlName="considerUrgentDeployment"
-               [min]="minDeploymentDate" />
-        @if (submitted && customerOnboardingForm.controls.considerUrgentDeployment.errors) {
-          <small class="validation-message mt-1 block">Select deployment date</small>
-        }
-      </div>
-
-    
+      </div>    
     </div>
 
     <!-- Right Section -->

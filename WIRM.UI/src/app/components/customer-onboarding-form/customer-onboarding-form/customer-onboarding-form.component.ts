@@ -46,6 +46,7 @@ export class CustomerOnboardingFormComponent implements OnInit,AfterViewInit {
 
   submitted = false;
   isFormSubmitted = false;
+  showMspConfirm = false;
 
   /** Earliest selectable day for required deployment date (today, local). */
   minDeploymentDate = '';
@@ -58,6 +59,7 @@ export class CustomerOnboardingFormComponent implements OnInit,AfterViewInit {
   readonly availableAddOnOptions = ['DTP','DTP + LSO','Online Review'];
   readonly workTypeOptions = ['New Setup', 'Migration', 'Enhancement', 'Support', 'Maintenance'];
   readonly serviceOptions = ['Consulting', 'Implementation', 'Training', 'Managed Service', 'Custom Development'];
+  readonly preferredLanguageOptions = ['English', 'German', 'French', 'Spanish', 'Italian','Korean'];
 
   /** Track which multi-select dropdown is open: e.g. 'addOns-0', 'workType-1', 'service-2' */
   openMultiSelectKey: string | null = null;
@@ -208,6 +210,26 @@ export class CustomerOnboardingFormComponent implements OnInit,AfterViewInit {
     list.removeAt(index);
   }
 
+  onMspToggle(event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      // Prevent the toggle from turning on immediately; show confirmation first
+      checkbox.checked = false;
+      this.showMspConfirm = true;
+    } else {
+      this.customerOnboardingForm.controls.msp.setValue(false);
+    }
+  }
+
+  onMspConfirm(): void {
+    this.customerOnboardingForm.controls.msp.setValue(true);
+    this.showMspConfirm = false;
+  }
+
+  onMspCancel(): void {
+    this.showMspConfirm = false;
+  }
+
   onEnterPress(event: KeyboardEvent | Event) {
     const target = event.target as HTMLElement;
     if (target.tagName.toLowerCase() !== 'textarea') {
@@ -228,13 +250,12 @@ export class CustomerOnboardingFormComponent implements OnInit,AfterViewInit {
     const stepValidations: { step: ElementRef<HTMLInputElement>; controls: AbstractControl[] }[] = [
       { step: this.inputStep1, controls: [c.customerGroupName, c.customerAccountName, c.codaCode] },
       { step: this.inputStep2, controls: [] },
-      { step: this.inputStep3, controls: [c.primaryUserLastName, c.primaryUserEmailAddress] },
+      { step: this.inputStep3, controls: [c.primaryUserLastName, c.primaryUserEmailAddress, c.primaryUserPreferredLanguage] },
       { step: this.inputStep4, controls: [] },
       { step: this.inputStep5, controls: [] },
       {
         step: this.inputStep6,
         controls: [
-          c.considerUrgentDeployment,
           c.considerOperationalOwnerAccount,
           c.considerAccountManager,
           c.considerMigrationPoc,
@@ -254,7 +275,7 @@ export class CustomerOnboardingFormComponent implements OnInit,AfterViewInit {
         !rows?.length || rows.every(isModifierEmpty);
 
       const isOtherUserEmpty = (row: Record<string, string>) =>
-        !row['firstName']?.trim() && !row['lastName']?.trim() && !row['email']?.trim() && !row['role']?.trim();
+        !row['firstName']?.trim() && !row['lastName']?.trim() && !row['email']?.trim() && !row['role']?.trim() && !row['preferredLanguage']?.trim();
 
       const allOtherUsersEmpty = (rows: Record<string, string>[]) =>
         !rows?.length || rows.every(isOtherUserEmpty);
@@ -287,7 +308,7 @@ export class CustomerOnboardingFormComponent implements OnInit,AfterViewInit {
             'Your customer onboarding request has been submitted successfully.';
           if (res.id != null && res.id !== '') {
           this.submitFormMessage$.next(
-  `${base} <a href="${res.link}" target="_blank">View Work Item</a>`
+  `${base} <a href="${res.link}" target="_blank">View Work Item ${res.id}</a>`
 );
           } else {
             this.submitFormMessage$.next(base);

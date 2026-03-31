@@ -14,6 +14,7 @@ export type OtherUserRowForm = {
     firstName: FormControl<string>;
     lastName: FormControl<string>;
     email: FormControl<string>;
+    preferredLanguage: FormControl<string>;
     role: FormControl<string>;
 };
 
@@ -22,6 +23,7 @@ export function createOtherUserRow(fb: NonNullableFormBuilder): FormGroup<OtherU
         firstName: fb.control(''),
         lastName: fb.control(''),
         email: fb.control(''),
+        preferredLanguage: fb.control(''),
         role: fb.control(''),
     });
 }
@@ -61,6 +63,8 @@ export function createModifierRow(fb: NonNullableFormBuilder): FormGroup<Modifie
 }
 
 export type CustomerOnboardingForm = {
+    existingClient: FormControl<boolean>;
+    federatedAccessSSO: FormControl<boolean>;
     customerGroupName: FormControl<string>;
     customerAccountName: FormControl<string>;
     codaCode: FormControl<string>;
@@ -72,13 +76,13 @@ export type CustomerOnboardingForm = {
     primaryUserFirstName: FormControl<string>;
     primaryUserLastName: FormControl<string>;
     primaryUserEmailAddress: FormControl<string>;
+    primaryUserPreferredLanguage: FormControl<string>;
     otherUsers: FormArray<FormGroup<OtherUserRowForm>>;
     customizedTemplates: FormArray<FormGroup<CustomizedTemplateRowForm>>;
     businessModifiers: FormArray<FormGroup<ModifierRowForm>>;
     financeModifiers: FormArray<FormGroup<ModifierRowForm>>;
     processModifiers: FormArray<FormGroup<ModifierRowForm>>;
     considerAnythingElse : FormControl<string>;
-    considerUrgentDeployment : FormControl<string>;
     considerOperationalOwnerAccount : FormControl<string>;
     considerAccountManager : FormControl<string>;
     considerMigrationPoc : FormControl<string>;
@@ -88,6 +92,8 @@ const req = [Validators.required];
 
 export function createCustomerOnboardingForm(fb: NonNullableFormBuilder): FormGroup<CustomerOnboardingForm> {
     return fb.group<CustomerOnboardingForm>({
+        existingClient: fb.control(false),
+        federatedAccessSSO: fb.control(false),
         customerGroupName: fb.control('', { validators: req }),
         customerAccountName: fb.control('', { validators: req }),
         codaCode: fb.control('', { validators: req }),
@@ -99,13 +105,13 @@ export function createCustomerOnboardingForm(fb: NonNullableFormBuilder): FormGr
         primaryUserFirstName: fb.control('', { validators: req }),
         primaryUserLastName: fb.control('', { validators: req }),
         primaryUserEmailAddress: fb.control('', { validators: [Validators.required, Validators.email] }),
+        primaryUserPreferredLanguage: fb.control('', { validators: req }),
         otherUsers: fb.array<FormGroup<OtherUserRowForm>>([]),
         customizedTemplates: fb.array<FormGroup<CustomizedTemplateRowForm>>([]),
         businessModifiers: fb.array<FormGroup<ModifierRowForm>>([]),
         financeModifiers: fb.array<FormGroup<ModifierRowForm>>([]),
         processModifiers: fb.array<FormGroup<ModifierRowForm>>([]),
         considerAnythingElse: fb.control(''),
-        considerUrgentDeployment: fb.control('', { validators: req }),
         considerOperationalOwnerAccount: fb.control('', { validators: req }),
         considerAccountManager: fb.control('', { validators: req }),
         considerMigrationPoc: fb.control('', { validators: req }),

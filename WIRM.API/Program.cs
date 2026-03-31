@@ -8,7 +8,6 @@ using WIRM.API.Interface;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Http.Features;
-using WIRM.API.Models.Request;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
